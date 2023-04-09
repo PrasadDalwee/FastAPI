@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.exceptions.error import errorMsg
+from app.exceptions.error import errorMsg, exception_handler
 from app.model import PostSchema
 
 #creating FastAPI's webapp
@@ -22,16 +22,19 @@ def root():
     return "use /docs to view APIs"
 
 #Creating a GET request for testing
+@exception_handler
 @app.get("/get", tags=["testing"])
 def root():
     return {"API":"FastAPI"}
 
 #GET all posts
+@exception_handler
 @app.get("/posts",tags=["search posts"])
 def get_posts():
     return {"data" : posts}
 
 #GET post by id
+@exception_handler
 @app.get("/posts/{id}", tags=["search posts"])
 def get_post_by_id(id:int):
     if id>len(posts):
@@ -44,6 +47,7 @@ def get_post_by_id(id:int):
     return errorMsg("Post with this id doesn't exist")
 
 #POST a post
+@exception_handler
 @app.post("/addPost", tags=["create posts"])
 def createPost(post:PostSchema):
     post.id=len(posts)+1

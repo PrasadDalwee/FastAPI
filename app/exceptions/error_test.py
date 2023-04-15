@@ -1,11 +1,24 @@
-#from app.exceptions.error import exception_handler
-from error import exception_handler
+from pydantic import BaseModel, Field, EmailStr 
 
-@exception_handler
-def errorfunc(a):
-    s=a/0
-    return "done"
+class Schema(BaseModel):
+    id: int = Field(default=None)
+    title: str = Field(...)
+    
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "Securing FastAPI applications with JWT.",
+            }
+        }
+        
 
-errorfunc("hello")
-errorfunc(20)
-print("something is still cooking.....")
+class db:
+    data=[]
+    
+
+def func(userDB: db, userData: Schema):
+    userDB.data.append(userData)
+    
+userDB=db()
+func(userDB, Schema(id=1, title='PND'))
+print(userDB.data)
